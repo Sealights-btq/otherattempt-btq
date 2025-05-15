@@ -39,9 +39,9 @@ pipeline {
         }
     }
     environment {
-        SL_TOKEN = (sh(returnStdout: true, script:"aws secretsmanager get-secret-value --region eu-west-1 --secret-id 'btq/template_token' | jq -r '.SecretString' | jq -r '.template_token'" )).trim()
-        IDENTIFIER = 'btq-template.btq.sealights.co'
-        tag = "template_${params.tag}"
+        SL_TOKEN = (sh(returnStdout: true, script:"aws secretsmanager get-secret-value --region eu-west-1 --secret-id 'btq/otherattempt_token' | jq -r '.SecretString' | jq -r '.otherattempt_token'" )).trim()
+        IDENTIFIER = 'btq-otherattempt.btq.sealights.co'
+        tag = "otherattempt_${params.tag}"
     }
      stages {
         stage("Preparing Spin up") {
@@ -54,10 +54,10 @@ pipeline {
                     IP = "${IDENTIFIER}"
                             stage("Updating Helm") {
                                 sh script: """
-                                    aws secretsmanager get-secret-value --region eu-west-1 --secret-id 'btq/template_key_pair' | jq -r '.SecretString' | jq -r '.template_key_pair' > key.pem
+                                    aws secretsmanager get-secret-value --region eu-west-1 --secret-id 'btq/btq/otherattempt_key_pair' | jq -r '.SecretString' | jq -r '.btq/otherattempt_key_pair' > key.pem
                                     chmod 0400 key.pem
 
-                                    ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@internal-template.btq.sealights.co 'bash /opt/sealights/install-btq.sh --tag=${env.tag} --buildname=${params.buildname} --labid=${params.labid} --branch=${params.branch} --token=${env.SL_TOKEN} --sl_branch=${params.branch}'
+                                    ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@internal-otherattempt.btq.sealights.co 'bash /opt/sealights/install-btq.sh --tag=${env.tag} --buildname=${params.buildname} --labid=${params.labid} --branch=${params.branch} --token=${env.SL_TOKEN} --sl_branch=${params.branch}'
                                 """
                             }
                 }

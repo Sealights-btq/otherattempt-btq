@@ -30,17 +30,17 @@ pipeline {
         }
     }
     environment {
-        IDENTIFIER = 'template.btq.sealights.co'
+        IDENTIFIER = 'otherattempt.btq.sealights.co'
     }
      stages {
         stage("Uninstalling helm") {
             steps {
                 script {
                         sh script: """
-                            aws secretsmanager get-secret-value --region eu-west-1 --secret-id 'btq/template_key_pair' | jq -r '.SecretString' | jq -r '.template_key_pair' > key.pem
+                            aws secretsmanager get-secret-value --region eu-west-1 --secret-id 'btq/btq/otherattempt_key_pair' | jq -r '.SecretString' | jq -r '.btq/otherattempt_key_pair' > key.pem
                             chmod 0400 key.pem
 
-                            ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@template.btq.sealights.co 'export KUBECONFIG=\$(k3d kubeconfig write btq) && helm uninstall btq'
+                            ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@otherattempt.btq.sealights.co 'export KUBECONFIG=\$(k3d kubeconfig write btq) && helm uninstall btq'
                         """
                 }
             }

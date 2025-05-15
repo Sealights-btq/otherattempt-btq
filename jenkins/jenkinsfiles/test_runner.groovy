@@ -32,16 +32,16 @@ pipeline {
     booleanParam(name: 'long_test', defaultValue: false, description: 'Runs a long test for showing tia (not effected by run_all_tests flag)')
   }
   environment {
-    MACHINE_DNS = 'http://internal-template.btq.sealights.co:8081'
-    machine_dns = 'http://internal-template.btq.sealights.co:8081'
-    SL_TOKEN = (sh(returnStdout: true, script:"aws secretsmanager get-secret-value --region eu-west-1 --secret-id 'btq/template_token' | jq -r '.SecretString' | jq -r '.template_token'" )).trim()
+    MACHINE_DNS = 'http://internal-otherattempt.btq.sealights.co:8081'
+    machine_dns = 'http://internal-otherattempt.btq.sealights.co:8081'
+    SL_TOKEN = (sh(returnStdout: true, script:"aws secretsmanager get-secret-value --region eu-west-1 --secret-id 'btq/otherattempt_token' | jq -r '.SecretString' | jq -r '.otherattempt_token'" )).trim()
     wait_time = "30"
   }
   stages{
     stage("Init test"){
       steps{
         script{
-          git branch: params.BRANCH, url: 'https://github.com/Sealights-btq/template-btq.git'
+          git branch: params.BRANCH, url: 'https://github.com/Sealights-btq/otherattempt-btq.git'
         }
       }
     }
